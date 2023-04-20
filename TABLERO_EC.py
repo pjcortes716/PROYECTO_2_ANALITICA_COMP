@@ -15,12 +15,14 @@ from pgmpy.estimators import MaximumLikelihoodEstimator
 from pgmpy.inference import VariableElimination
 #importamos las librerias de conexion a bases de datos
 from sqlalchemy import create_engine
+#importamos la libreria para leer el modelo de la red definitiva en formato .bif
+from pgmpy.readwrite import BIFReader
 #importamos los datos ya limpios de heart_desease
 heart_desease=pd.read_csv(str(os.getcwd())+"/"+"datos_para_red")
 #construimos la red, con los nodos:
-modelo=BayesianNetwork([('E','A'),('E','H'),('C','EC'),('S','EC'),('T','EC'),('A','EC'),
-                        ('H','EC'),('EC','RE'),('EC','HR'),('EC','P'),('EC','AI'),('EC','SER'),
-                        ('EC','F'),('EC','D'),('S','D')])
+#modelo=BayesianNetwork([('E','A'),('E','H'),('C','EC'),('S','EC'),('T','EC'),('A','EC'),
+#                        ('H','EC'),('EC','RE'),('EC','HR'),('EC','P'),('EC','AI'),('EC','SER'),
+#                       ('EC','F'),('EC','D'),('S','D')])
 
 env_path='env\\app.env'
 # load env 
@@ -115,8 +117,10 @@ lowerICDolorPechoEnfermo=math.floor(mediaMuestralDolorPechoEnfermo-tDolorPechoEn
 #1. Se generan el limite tanto superior como inferior del interalo de confianza para todas las combinaciones ij donde i pertence Presion, MPC, Colesterol, Tipo de Dolor de pecho, 
 #y j pertence a enfermo, saludable
 
-modelo.fit(data=heart_desease,estimator=MaximumLikelihoodEstimator)
-
+#modelo.fit(data=heart_desease,estimator=MaximumLikelihoodEstimator)
+#cargamos el modelo de la red definitiva
+reader = BIFReader("modelo_def.bif")
+modelo = reader.get_model(state_name_type=float)#ojo con el argumento, es para que no se conviertan los numeros a strings
 infer=VariableElimination(modelo)
 
 
