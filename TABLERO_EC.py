@@ -7,6 +7,7 @@ import pandas as pd
 from scipy.stats import t
 import math
 import os
+import numpy as np
 from dotenv import load_dotenv
 import plotly.graph_objs as go
 #importamos las librerias para la red bayesiana
@@ -18,7 +19,7 @@ from sqlalchemy import create_engine
 #importamos la libreria para leer el modelo de la red definitiva en formato .bif
 from pgmpy.readwrite import BIFReader
 #importamos los datos ya limpios de heart_desease
-heart_desease=pd.read_csv(str(os.getcwd())+"/"+"datos_para_red")
+#heart_desease=pd.read_csv(str(os.getcwd())+"/"+"datos_para_red")
 #construimos la red, con los nodos:
 #modelo=BayesianNetwork([('E','A'),('E','H'),('C','EC'),('S','EC'),('T','EC'),('A','EC'),
 #                        ('H','EC'),('EC','RE'),('EC','HR'),('EC','P'),('EC','AI'),('EC','SER'),
@@ -405,7 +406,7 @@ ST_depresion,electro_card,max_h_rate,pendiente,fluor):
         caso_a = infer.query(["EC"] , evidence =evidencia)
         print(evidencia)
         print(caso_a)
-        respuesta="La probabilidad de que el paciente tenga una enfermedad cardiaca es de {}".format(caso_a.values[1])
+        respuesta="La probabilidad de que el paciente tenga una enfermedad cardiaca es de {}".format(np.round(caso_a.values[1],2))
         return respuesta
     
 if __name__ == '__main__':
