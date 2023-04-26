@@ -45,9 +45,9 @@ heart_disease=heart_disease.drop(labels="index",axis=1)
 datosMaximaFrecuenciaCardiaca=heart_disease.loc[:,["ENFERMEDAD_CARD","MAX_HEART_R"]]
 datosMaximaFrecuenciaCardiacaSano=datosMaximaFrecuenciaCardiaca[["ENFERMEDAD_CARD","MAX_HEART_R"]][datosMaximaFrecuenciaCardiaca["ENFERMEDAD_CARD"]=="Sano"]
 datosMaximaFrecuenciaCardiacaEnfermo=datosMaximaFrecuenciaCardiaca[["ENFERMEDAD_CARD","MAX_HEART_R"]][datosMaximaFrecuenciaCardiaca["ENFERMEDAD_CARD"]=="Enfermo"]
-datosColesterol=heart_disease.loc[:,["ENFERMEDAD_CARD","COLESTEROL"]]
-datosColesterolSano=datosColesterol[["ENFERMEDAD_CARD","COLESTEROL"]][datosColesterol["ENFERMEDAD_CARD"]=="Sano"]
-datosColesterolEnfermo=datosColesterol[["ENFERMEDAD_CARD","COLESTEROL"]][datosColesterol["ENFERMEDAD_CARD"]=="Enfermo"]
+datosEdad=heart_disease.loc[:,["ENFERMEDAD_CARD","EDAD"]]
+datosEdadSano=datosEdad[["ENFERMEDAD_CARD","EDAD"]][datosEdad["ENFERMEDAD_CARD"]=="Sano"]
+datosEdadEnfermo=datosEdad[["ENFERMEDAD_CARD","EDAD"]][datosEdad["ENFERMEDAD_CARD"]=="Enfermo"]
 datosPresionSanguinea=heart_disease.loc[:,["ENFERMEDAD_CARD","PRESION_SAN"]]
 datosPresionSanguineaSano=datosPresionSanguinea[["ENFERMEDAD_CARD","PRESION_SAN"]][datosPresionSanguinea["ENFERMEDAD_CARD"]=="Sano"]
 datosPresionSanguineaEnfermo=datosPresionSanguinea[["ENFERMEDAD_CARD","PRESION_SAN"]][datosPresionSanguinea["ENFERMEDAD_CARD"]=="Enfermo"]
@@ -61,34 +61,34 @@ datosDolorPechoEnfermo=datosDolorPecho[["ENFERMEDAD_CARD","DOLOR_PECHO"]][datosD
 #Estadisticas
 mediaMuestralFreqSano=datosMaximaFrecuenciaCardiacaSano["MAX_HEART_R"].mean()
 mediaMuestralFreqEnfermo=datosMaximaFrecuenciaCardiacaEnfermo["MAX_HEART_R"].mean()
-mediaMuestralColesterolSano=datosColesterolSano["COLESTEROL"].mean()
-mediaMuestralColesterolEnfermo=datosColesterolEnfermo["COLESTEROL"].mean()
+mediaMuestralEdadSano=datosEdadSano["EDAD"].mean()
+mediaMuestralEdadEnfermo=datosEdadEnfermo["EDAD"].mean()
 dfFreqSano=datosMaximaFrecuenciaCardiacaSano["MAX_HEART_R"].count()-1
 dfFreqEnfermo=datosMaximaFrecuenciaCardiacaEnfermo["MAX_HEART_R"].count()-1
-dfColesterolSano=datosColesterolSano["COLESTEROL"].count()-1
-dfColesterolEnfermo=datosColesterolEnfermo["COLESTEROL"].count()-1
-tFreqSano=t.ppf(1-0.0001/2,dfFreqSano,loc=0, scale=1)
-tFreqEnfermo=t.ppf(1-0.0001/2,dfFreqEnfermo,loc=0, scale=1)
-tColesterolSano=t.ppf(1-0.0001/2,dfColesterolSano,loc=0, scale=1)
-tColesterolEnfermo=t.ppf(1-0.0001/2,dfColesterolEnfermo,loc=0, scale=1)
+dfEdadSano=datosEdadSano["EDAD"].count()-1
+dfEdadEnfermo=datosEdadEnfermo["EDAD"].count()-1
+tFreqSano=t.ppf(1-0.05/2,dfFreqSano,loc=0, scale=1)
+tFreqEnfermo=t.ppf(1-0.05/2,dfFreqEnfermo,loc=0, scale=1)
+tEdadSano=t.ppf(1-0.05/2,dfEdadSano,loc=0, scale=1)
+tEdadEnfermo=t.ppf(1-0.05/2,dfEdadEnfermo,loc=0, scale=1)
 varianzaMuestralFreqSano=datosMaximaFrecuenciaCardiacaSano["MAX_HEART_R"].var()
 varianzaMuestralFreqEnfermo=datosMaximaFrecuenciaCardiacaEnfermo["MAX_HEART_R"].var()
-varianzaMuestralColesterolSano=datosColesterolSano["COLESTEROL"].var()
-varianzaMuestralColesterolEnfermo=datosColesterolEnfermo["COLESTEROL"].var()
+varianzaMuestralEdadSano=datosEdadSano["EDAD"].var()
+varianzaMuestralEdadEnfermo=datosEdadEnfermo["EDAD"].var()
 mediaMuestralPresionSano=datosPresionSanguineaSano["PRESION_SAN"].mean()
 mediaMuestralPresionEnfermo=datosPresionSanguineaEnfermo["PRESION_SAN"].mean()
 dfPresionSano=datosPresionSanguineaSano["PRESION_SAN"].count()-1
 dfPresionEnfermo=datosPresionSanguineaEnfermo["PRESION_SAN"].count()-1
-tPresionSano=t.ppf(1-0.0001/2,dfPresionSano,loc=0, scale=1)
-tPresionEnfermo=t.ppf(1-0.0001/2,dfPresionEnfermo,loc=0, scale=1)
+tPresionSano=t.ppf(1-0.05/2,dfPresionSano,loc=0, scale=1)
+tPresionEnfermo=t.ppf(1-0.05/2,dfPresionEnfermo,loc=0, scale=1)
 varianzaMuestralPresionSano=datosPresionSanguineaSano["PRESION_SAN"].var()
 varianzaMuestralPresionEnfermo=datosPresionSanguineaEnfermo["PRESION_SAN"].var()
 mediaMuestralDolorPechoSano=(datosDolorPechoSano["DOLOR_PECHO"].astype(int)).mean()
 mediaMuestralDolorPechoEnfermo=(datosDolorPechoEnfermo["DOLOR_PECHO"].astype(int)).mean()
 dfDolorPechoSano=datosDolorPechoSano["DOLOR_PECHO"].count()-1
 dfDolorPechoEnfermo=datosDolorPechoEnfermo["DOLOR_PECHO"].count()-1
-tDolorPechoSano=t.ppf(1-0.0001/2,dfDolorPechoSano,loc=0, scale=1)
-tDolorPechoEnfermo=t.ppf(1-0.0001/2,dfDolorPechoEnfermo,loc=0, scale=1)
+tDolorPechoSano=t.ppf(1-0.05/2,dfDolorPechoSano,loc=0, scale=1)
+tDolorPechoEnfermo=t.ppf(1-0.05/2,dfDolorPechoEnfermo,loc=0, scale=1)
 varianzaMuestralDolorPechoSano=(datosDolorPechoSano["DOLOR_PECHO"].astype(int)).var()
 varianzaMuestralDolorPechoEnfermo=(datosDolorPechoEnfermo["DOLOR_PECHO"].astype(int)).var()
 #En el anterior bloque de codigo lo que se hace para Presion, MPC, Colesterol, y Tipo de Dolor de pecho es:
@@ -97,22 +97,22 @@ varianzaMuestralDolorPechoEnfermo=(datosDolorPechoEnfermo["DOLOR_PECHO"].astype(
 #3. Dado que se piensa hacer pruebas t simples se determina que los grados de libertad es n_ij-1 donde i pertence Presion, MPC, Colesterol, Tipo de Dolor de pecho, 
 #y j pertence a enfermo, saludable
 #4. Se calcula la t para cada muestra con un alpha de 0.0001
-upperICFreqSano=mediaMuestralFreqSano+tFreqSano*math.sqrt(varianzaMuestralFreqSano/(dfFreqSano+1))
-lowerICFreqSano=mediaMuestralFreqSano-tFreqSano*math.sqrt(varianzaMuestralFreqSano/(dfFreqSano+1))
-upperICFreqEnfermo=mediaMuestralFreqEnfermo+tFreqEnfermo*math.sqrt(varianzaMuestralFreqEnfermo/(dfFreqEnfermo+1))
-lowerICFreqEnfermo=mediaMuestralFreqEnfermo-tFreqEnfermo*math.sqrt(varianzaMuestralFreqEnfermo/(dfFreqEnfermo+1))
-upperICColesterolSano=mediaMuestralColesterolSano+tColesterolSano*math.sqrt(varianzaMuestralColesterolSano/(dfColesterolSano+1))
-lowerICColesterolSano=mediaMuestralColesterolSano-tColesterolSano*math.sqrt(varianzaMuestralColesterolSano/(dfColesterolSano+1))
-upperICColesterolEnfermo=mediaMuestralColesterolEnfermo+tColesterolEnfermo*math.sqrt(varianzaMuestralColesterolEnfermo/(dfColesterolEnfermo+1))
-lowerICColesterolEnfermo=mediaMuestralColesterolEnfermo-tColesterolEnfermo*math.sqrt(varianzaMuestralColesterolEnfermo/(dfColesterolEnfermo+1))
-upperICPresionSano=mediaMuestralPresionSano+tPresionSano*math.sqrt(varianzaMuestralPresionSano/(dfPresionSano+1))
-lowerICPresionSano=mediaMuestralPresionSano-tPresionSano*math.sqrt(varianzaMuestralPresionSano/(dfPresionSano+1))
-upperICPresionEnfermo=mediaMuestralPresionEnfermo+tPresionEnfermo*math.sqrt(varianzaMuestralPresionEnfermo/(dfPresionEnfermo+1))
-lowerICPresionEnfermo=mediaMuestralPresionEnfermo-tPresionEnfermo*math.sqrt(varianzaMuestralPresionEnfermo/(dfPresionEnfermo+1))
-upperICDolorPechoSano=math.floor(mediaMuestralDolorPechoSano+tDolorPechoSano*math.sqrt(varianzaMuestralDolorPechoSano/(dfPresionSano+1)))
-lowerICDolorPechoSano=math.floor(mediaMuestralDolorPechoSano-tDolorPechoSano*math.sqrt(varianzaMuestralDolorPechoSano/(dfPresionSano+1)))
-upperICDolorPechoEnfermo=round(mediaMuestralDolorPechoEnfermo+tDolorPechoEnfermo*math.sqrt(varianzaMuestralDolorPechoEnfermo/(dfPresionEnfermo+1)))
-lowerICDolorPechoEnfermo=math.floor(mediaMuestralDolorPechoEnfermo-tDolorPechoEnfermo*math.sqrt(varianzaMuestralDolorPechoEnfermo/(dfPresionEnfermo+1)))
+upperIPFreqSano=mediaMuestralFreqSano+tFreqSano*math.sqrt(varianzaMuestralFreqSano*(1+(1/(dfFreqSano+1))))
+lowerIPFreqSano=mediaMuestralFreqSano-tFreqSano*math.sqrt(varianzaMuestralFreqSano*(1+(1/(dfFreqSano+1))))
+upperIPFreqEnfermo=mediaMuestralFreqEnfermo+tFreqEnfermo*math.sqrt(varianzaMuestralFreqEnfermo*(1+(1/(dfFreqEnfermo+1))))
+lowerIPFreqEnfermo=mediaMuestralFreqEnfermo-tFreqEnfermo*math.sqrt(varianzaMuestralFreqEnfermo*(1+(1/(dfFreqEnfermo+1))))
+upperIPEdadSano=mediaMuestralEdadSano+tEdadSano*math.sqrt(varianzaMuestralEdadSano*(1+(1/(dfEdadSano+1))))
+lowerIPEdadSano=mediaMuestralEdadSano-tEdadSano*math.sqrt(varianzaMuestralEdadSano*(1+(1/(dfEdadSano+1))))
+upperIPEdadEnfermo=mediaMuestralEdadEnfermo+tEdadEnfermo*math.sqrt(varianzaMuestralEdadEnfermo*(1+(1/(dfEdadEnfermo+1))))
+lowerIPEdadEnfermo=mediaMuestralEdadEnfermo-tEdadEnfermo*math.sqrt(varianzaMuestralEdadEnfermo*(1+(1/(dfEdadEnfermo+1))))
+upperIPPresionSano=mediaMuestralPresionSano+tPresionSano*math.sqrt(varianzaMuestralPresionSano*(1+(1/(dfPresionSano+1))))
+lowerIPPresionSano=mediaMuestralPresionSano-tPresionSano*math.sqrt(varianzaMuestralPresionSano*(1+(1/(dfPresionSano+1))))
+upperIPPresionEnfermo=mediaMuestralPresionEnfermo+tPresionEnfermo*math.sqrt(varianzaMuestralPresionEnfermo*(1+(1/(dfPresionEnfermo+1))))
+lowerIPPresionEnfermo=mediaMuestralPresionEnfermo-tPresionEnfermo*math.sqrt(varianzaMuestralPresionEnfermo*(1+(1/(dfPresionEnfermo+1))))
+upperIPDolorPechoSano=math.ceil(mediaMuestralDolorPechoSano+tDolorPechoSano*math.sqrt(varianzaMuestralDolorPechoSano*(1+(1/(dfPresionSano+1)))))
+lowerIPDolorPechoSano=math.floor(mediaMuestralDolorPechoSano-tDolorPechoSano*math.sqrt(varianzaMuestralDolorPechoSano*(1+(1/(dfPresionSano+1)))))
+upperIPDolorPechoEnfermo=math.ceil(mediaMuestralDolorPechoEnfermo+tDolorPechoEnfermo*math.sqrt(varianzaMuestralDolorPechoEnfermo*(1+(1/(dfPresionEnfermo+1)))))
+lowerIPDolorPechoEnfermo=math.floor(mediaMuestralDolorPechoEnfermo-tDolorPechoEnfermo*math.sqrt(varianzaMuestralDolorPechoEnfermo*(1+(1/(dfPresionEnfermo+1)))))
 #En el anterior bloque de codigo lo que se hace para Presion, MPC, Colesterol, y Tipo de Dolor de pecho es:
 #1. Se generan el limite tanto superior como inferior del interalo de confianza para todas las combinaciones ij donde i pertence Presion, MPC, Colesterol, Tipo de Dolor de pecho, 
 #y j pertence a enfermo, saludable
@@ -264,47 +264,47 @@ app.layout = html.Div([
     [Input("generar","n_clicks")],
     [State("MFCGraficas", "value"),State("ColesterolGraficas", "value"),State("PresionGraficas", "value"),State("TipoDolorGraficas", "value")]
 )
-def actualizarGraficaMFCyColesterol(n_clicks, MFC, Colesterol, Presion, TipoDolor):
+def actualizarGraficaMFCyColesterol(n_clicks, MFC, Edad, Presion, TipoDolor):
     if n_clicks==0:
-        scatterSano1=go.Scatter(x=datosColesterolSano["COLESTEROL"], y=datosMaximaFrecuenciaCardiacaSano["MAX_HEART_R"], mode="markers", marker=dict(color="blue"), name="Saludables")
-        scatterEnfermo1=go.Scatter(x=datosColesterolEnfermo["COLESTEROL"], y=datosMaximaFrecuenciaCardiacaEnfermo["MAX_HEART_R"], mode="markers", marker=dict(color="red"), name= "Enfermos")
-        layoutGraph1=go.Layout(title="Scatter de la Máxima Frecuencia Cardiaca y Colesterol", xaxis=dict(title="Colesterol [mg/dl]"), yaxis=dict(title="Maxima Frecuencia Cardiaca [bpm]"))
-        rectSano1=go.Scatter(x=[lowerICColesterolSano, lowerICColesterolSano, upperICColesterolSano, upperICColesterolSano, lowerICColesterolSano], y=[lowerICFreqSano, upperICFreqSano, upperICFreqSano, lowerICFreqSano, lowerICFreqSano], fill="toself", name= "Valor Esperado Saludables")
-        rectEnfermo1=go.Scatter(x=[lowerICColesterolEnfermo, lowerICColesterolEnfermo, upperICColesterolEnfermo, upperICColesterolEnfermo, lowerICColesterolEnfermo], y=[lowerICFreqEnfermo, upperICFreqEnfermo, upperICFreqEnfermo, lowerICFreqEnfermo, lowerICFreqEnfermo], fill="toself", name="Valor Esperado Enfermos")
+        scatterSano1=go.Scatter(x=datosEdadSano["EDAD"], y=datosMaximaFrecuenciaCardiacaSano["MAX_HEART_R"], mode="markers", marker=dict(color='rgb(204, 255, 255)'), name="Saludables")
+        scatterEnfermo1=go.Scatter(x=datosEdadEnfermo["EDAD"], y=datosMaximaFrecuenciaCardiacaEnfermo["MAX_HEART_R"], mode="markers", marker=dict(color='rgb(255, 204, 204)'), name= "Enfermos")
+        layoutGraph1=go.Layout(title="Scatter de la Máxima Frecuencia Cardiaca y Edad", xaxis=dict(title="Edad"), yaxis=dict(title="Maxima Frecuencia Cardiaca [bpm]"))
+        rectSano1=go.Scatter(x=[lowerIPEdadSano, lowerIPEdadSano, upperIPEdadSano, upperIPEdadSano, lowerIPEdadSano], y=[lowerIPFreqSano, upperIPFreqSano, upperIPFreqSano, lowerIPFreqSano, lowerIPFreqSano], fill="toself", name= "Predicción Saludables", marker=dict(color='rgb(51, 255, 255)'))
+        rectEnfermo1=go.Scatter(x=[lowerIPEdadEnfermo, lowerIPEdadEnfermo, upperIPEdadEnfermo, upperIPEdadEnfermo, lowerIPEdadEnfermo], y=[lowerIPFreqEnfermo, upperIPFreqEnfermo, upperIPFreqEnfermo, lowerIPFreqEnfermo, lowerIPFreqEnfermo], fill="toself", name="Predicción Enfermos", marker=dict(color='rgb(255, 51, 51)'))
         graph1=go.Figure(data=[scatterSano1, scatterEnfermo1, rectSano1, rectEnfermo1], layout=layoutGraph1)
-        scatterSano2=go.Scatter(x=datosColesterolSano["COLESTEROL"], y=datosPresionSanguineaSano["PRESION_SAN"], mode="markers", marker=dict(color="blue"), name="Saludables")
-        scatterEnfermo2=go.Scatter(x=datosColesterolEnfermo["COLESTEROL"], y=datosPresionSanguineaSano["PRESION_SAN"], mode="markers", marker=dict(color="red"), name= "Enfermos")
-        layoutGraph2=go.Layout(title="Scatter de la Presión Sanguinea y Colesterol", xaxis=dict(title="Colesterol [mg/dl]"), yaxis=dict(title="Presión Sanguinea [mm Hg]"))
-        rectSano2=go.Scatter(x=[lowerICColesterolSano, lowerICColesterolSano, upperICColesterolSano, upperICColesterolSano, lowerICColesterolSano], y=[lowerICPresionSano, upperICPresionSano, upperICPresionSano, lowerICPresionSano, lowerICPresionSano], fill="toself", name= "Valor Esperado Saludables")
-        rectEnfermo2=go.Scatter(x=[lowerICColesterolEnfermo, lowerICColesterolEnfermo, upperICColesterolEnfermo, upperICColesterolEnfermo, lowerICColesterolEnfermo], y=[lowerICPresionEnfermo, upperICPresionEnfermo, upperICPresionEnfermo, lowerICPresionEnfermo, lowerICPresionEnfermo], fill="toself", name="Valor Esperado Enfermos")
+        scatterSano2=go.Scatter(x=datosEdadSano["EDAD"], y=datosPresionSanguineaSano["PRESION_SAN"], mode="markers", marker=dict(color='rgb(204, 255, 255)'), name="Saludables")
+        scatterEnfermo2=go.Scatter(x=datosEdadEnfermo["EDAD"], y=datosPresionSanguineaSano["PRESION_SAN"], mode="markers", marker=dict(color='rgb(255, 204, 204)'), name= "Enfermos")
+        layoutGraph2=go.Layout(title="Scatter de la Presión Sanguinea y Edad", xaxis=dict(title="Edad"), yaxis=dict(title="Presión Sanguinea [mm Hg]"))
+        rectSano2=go.Scatter(x=[lowerIPEdadSano, lowerIPEdadSano, upperIPEdadSano, upperIPEdadSano, lowerIPEdadSano], y=[lowerIPPresionSano, upperIPPresionSano, upperIPPresionSano, lowerIPPresionSano, lowerIPPresionSano], fill="toself", name= "Predicción Saludables", marker=dict(color='rgb(51, 255, 255)'))
+        rectEnfermo2=go.Scatter(x=[lowerIPEdadEnfermo, lowerIPEdadEnfermo, upperIPEdadEnfermo, upperIPEdadEnfermo, lowerIPEdadEnfermo], y=[lowerIPPresionEnfermo, upperIPPresionEnfermo, upperIPPresionEnfermo, lowerIPPresionEnfermo, lowerIPPresionEnfermo], fill="toself", name="Predicción Enfermos", marker=dict(color='rgb(255, 51, 51)'))
         graph2=go.Figure(data=[scatterSano2, scatterEnfermo2, rectSano2, rectEnfermo2], layout=layoutGraph2)
-        scatterSano3=go.Scatter(x=datosPresionSanguineaSano["PRESION_SAN"], y=datosDolorPechoSano["DOLOR_PECHO"], mode="markers", marker=dict(color="blue"), name="Saludables")
-        scatterEnfermo3=go.Scatter(x=datosPresionSanguineaEnfermo["PRESION_SAN"], y=datosDolorPechoEnfermo["DOLOR_PECHO"], mode="markers", marker=dict(color="red"), name= "Enfermos")
+        scatterSano3=go.Scatter(x=datosPresionSanguineaSano["PRESION_SAN"], y=datosDolorPechoSano["DOLOR_PECHO"], mode="markers", marker=dict(color='rgb(204, 255, 255)'), name="Saludables")
+        scatterEnfermo3=go.Scatter(x=datosPresionSanguineaEnfermo["PRESION_SAN"], y=datosDolorPechoEnfermo["DOLOR_PECHO"], mode="markers", marker=dict(color='rgb(255, 204, 204)'), name= "Enfermos")
         layoutGraph3=go.Layout(title="Scatter de la Presión Sanguinea y el tipo de Dolor de Pecho", xaxis=dict(title="Presion sanguinea [mm HG]"), yaxis=dict(title="Tipo de dolor de pecho"))
-        rectSano3=go.Scatter(x=[lowerICPresionSano, lowerICPresionSano, upperICPresionSano, upperICPresionSano, lowerICPresionSano], y=[lowerICDolorPechoSano, upperICDolorPechoSano, upperICDolorPechoSano, lowerICDolorPechoSano, lowerICDolorPechoSano], fill="toself", name= "Valor Esperado Saludables")
-        rectEnfermo3=go.Scatter(x=[lowerICPresionEnfermo, lowerICPresionEnfermo, upperICPresionEnfermo, upperICPresionEnfermo, lowerICPresionEnfermo], y=[lowerICDolorPechoEnfermo, upperICDolorPechoEnfermo, upperICDolorPechoEnfermo, lowerICDolorPechoEnfermo, lowerICDolorPechoEnfermo], fill="toself", name="Valor Esperado Enfermos")
+        rectSano3=go.Scatter(x=[lowerIPPresionSano, lowerIPPresionSano, upperIPPresionSano, upperIPPresionSano, lowerIPPresionSano], y=[lowerIPDolorPechoSano, upperIPDolorPechoSano, upperIPDolorPechoSano, lowerIPDolorPechoSano, lowerIPDolorPechoSano], fill="toself", name= "Predicción Saludables", marker=dict(color='rgb(51, 255, 255)'))
+        rectEnfermo3=go.Scatter(x=[lowerIPPresionEnfermo, lowerIPPresionEnfermo, upperIPPresionEnfermo, upperIPPresionEnfermo, lowerIPPresionEnfermo], y=[lowerIPDolorPechoEnfermo, upperIPDolorPechoEnfermo, upperIPDolorPechoEnfermo, lowerIPDolorPechoEnfermo, lowerIPDolorPechoEnfermo], fill="toself", name="Predicción Enfermos", marker=dict(color='rgb(255, 51, 51)'))
         graph3=go.Figure(data=[scatterSano3, scatterEnfermo3, rectSano3, rectEnfermo3], layout=layoutGraph3)
         
     else:
-        scatterSano1=go.Scatter(x=datosColesterolSano["COLESTEROL"], y=datosMaximaFrecuenciaCardiacaSano["MAX_HEART_R"], mode="markers", marker=dict(color="blue"), name="Saludables")
-        scatterEnfermo1=go.Scatter(x=datosColesterolEnfermo["COLESTEROL"], y=datosMaximaFrecuenciaCardiacaEnfermo["MAX_HEART_R"], mode="markers", marker=dict(color="red"), name= "Enfermos")
-        layoutGraph1=go.Layout(title="Scatter de la Máxima Frecuencia Cardiaca y Colesterol", xaxis=dict(title="Colesterol [mg/dl]"), yaxis=dict(title="Maxima Frecuencia Cardiaca [añadir unidades]"))
-        rectSano1=go.Scatter(x=[lowerICColesterolSano, lowerICColesterolSano, upperICColesterolSano, upperICColesterolSano, lowerICColesterolSano], y=[lowerICFreqSano, upperICFreqSano, upperICFreqSano, lowerICFreqSano, lowerICFreqSano], fill="toself", name= "Valor Esperado Saludables")
-        rectEnfermo1=go.Scatter(x=[lowerICColesterolEnfermo, lowerICColesterolEnfermo, upperICColesterolEnfermo, upperICColesterolEnfermo, lowerICColesterolEnfermo], y=[lowerICFreqEnfermo, upperICFreqEnfermo, upperICFreqEnfermo, lowerICFreqEnfermo, lowerICFreqEnfermo], fill="toself", name="Valor Esperado Enfermos")
-        puntoPaciente1=go.Scatter(x=[Colesterol],y=[MFC], mode="markers", marker=dict(symbol="x",color="black",size=10), name="Paciente Actual")
+        scatterSano1=go.Scatter(x=datosEdadSano["EDAD"], y=datosMaximaFrecuenciaCardiacaSano["MAX_HEART_R"], mode="markers", marker=dict(color='rgb(204, 255, 255)'), name="Saludables")
+        scatterEnfermo1=go.Scatter(x=datosEdadEnfermo["EDAD"], y=datosMaximaFrecuenciaCardiacaEnfermo["MAX_HEART_R"], mode="markers", marker=dict(color='rgb(255, 204, 204)'), name= "Enfermos")
+        layoutGraph1=go.Layout(title="Scatter de la Máxima Frecuencia Cardiaca y Edad", xaxis=dict(title="Edad"), yaxis=dict(title="Maxima Frecuencia Cardiaca [bpm]"))
+        rectSano1=go.Scatter(x=[lowerIPEdadSano, lowerIPEdadSano, upperIPEdadSano, upperIPEdadSano, lowerIPEdadSano], y=[lowerIPFreqSano, upperIPFreqSano, upperIPFreqSano, lowerIPFreqSano, lowerIPFreqSano], fill="toself", name= "Predicción Saludables", marker=dict(color='rgb(51, 255, 255)'))
+        rectEnfermo1=go.Scatter(x=[lowerIPEdadEnfermo, lowerIPEdadEnfermo, upperIPEdadEnfermo, upperIPEdadEnfermo, lowerIPEdadEnfermo], y=[lowerIPFreqEnfermo, upperIPFreqEnfermo, upperIPFreqEnfermo, lowerIPFreqEnfermo, lowerIPFreqEnfermo], fill="toself", name="Predicción Enfermos", marker=dict(color='rgb(255, 51, 51)'))
+        puntoPaciente1=go.Scatter(x=[Edad],y=[MFC], mode="markers", marker=dict(symbol="x",color="black",size=10), name="Paciente Actual")
         graph1=go.Figure(data=[scatterSano1, scatterEnfermo1, puntoPaciente1, rectSano1, rectEnfermo1], layout=layoutGraph1)
-        scatterSano2=go.Scatter(x=datosColesterolSano["COLESTEROL"], y=datosPresionSanguineaSano["PRESION_SAN"], mode="markers", marker=dict(color="blue"), name="Saludables")
-        scatterEnfermo2=go.Scatter(x=datosColesterolEnfermo["COLESTEROL"], y=datosPresionSanguineaSano["PRESION_SAN"], mode="markers", marker=dict(color="red"), name= "Enfermos")
-        layoutGraph2=go.Layout(title="Scatter de la Presión Sanguinea y Colesterol", xaxis=dict(title="Colesterol [mg/dl]"), yaxis=dict(title="Presión Sanguinea [mm HG]"))
-        rectSano2=go.Scatter(x=[lowerICColesterolSano, lowerICColesterolSano, upperICColesterolSano, upperICColesterolSano, lowerICColesterolSano], y=[lowerICPresionSano, upperICPresionSano, upperICPresionSano, lowerICPresionSano, lowerICPresionSano], fill="toself", name= "Valor Esperado Saludables")
-        rectEnfermo2=go.Scatter(x=[lowerICColesterolEnfermo, lowerICColesterolEnfermo, upperICColesterolEnfermo, upperICColesterolEnfermo, lowerICColesterolEnfermo], y=[lowerICPresionEnfermo, upperICPresionEnfermo, upperICPresionEnfermo, lowerICPresionEnfermo, lowerICPresionEnfermo], fill="toself", name="Valor Esperado Enfermos")
-        puntoPaciente2=go.Scatter(x=[Colesterol],y=[Presion], mode="markers", marker=dict(symbol="x",color="black",size=10), name="Paciente Actual")
+        scatterSano2=go.Scatter(x=datosEdadSano["EDAD"], y=datosPresionSanguineaSano["PRESION_SAN"], mode="markers", marker=dict(color='rgb(204, 255, 255)'), name="Saludables")
+        scatterEnfermo2=go.Scatter(x=datosEdadEnfermo["EDAD"], y=datosPresionSanguineaSano["PRESION_SAN"], mode="markers", marker=dict(color='rgb(255, 204, 204)'), name= "Enfermos")
+        layoutGraph2=go.Layout(title="Scatter de la Presión Sanguinea y Edad", xaxis=dict(title="Edad"), yaxis=dict(title="Presión Sanguinea [mm Hg]"))
+        rectSano2=go.Scatter(x=[lowerIPEdadSano, lowerIPEdadSano, upperIPEdadSano, upperIPEdadSano, lowerIPEdadSano], y=[lowerIPPresionSano, upperIPPresionSano, upperIPPresionSano, lowerIPPresionSano, lowerIPPresionSano], fill="toself", name= "Predicción Saludables", marker=dict(color='rgb(51, 255, 255)'))
+        rectEnfermo2=go.Scatter(x=[lowerIPEdadEnfermo, lowerIPEdadEnfermo, upperIPEdadEnfermo, upperIPEdadEnfermo, lowerIPEdadEnfermo], y=[lowerIPPresionEnfermo, upperIPPresionEnfermo, upperIPPresionEnfermo, lowerIPPresionEnfermo, lowerIPPresionEnfermo], fill="toself", name="Predicción Enfermos", marker=dict(color='rgb(255, 51, 51)'))
+        puntoPaciente2=go.Scatter(x=[Edad],y=[Presion], mode="markers", marker=dict(symbol="x",color="black",size=10), name="Paciente Actual")
         graph2=go.Figure(data=[scatterSano2, scatterEnfermo2,puntoPaciente2 ,rectSano2, rectEnfermo2], layout=layoutGraph2)
-        scatterSano3=go.Scatter(x=datosPresionSanguineaSano["PRESION_SAN"], y=datosDolorPechoSano["DOLOR_PECHO"], mode="markers", marker=dict(color="blue"), name="Saludables")
-        scatterEnfermo3=go.Scatter(x=datosPresionSanguineaEnfermo["PRESION_SAN"], y=datosDolorPechoEnfermo["DOLOR_PECHO"], mode="markers", marker=dict(color="red"), name= "Enfermos")
+        scatterSano3=go.Scatter(x=datosPresionSanguineaSano["PRESION_SAN"], y=datosDolorPechoSano["DOLOR_PECHO"], mode="markers", marker=dict(color='rgb(204, 255, 255)'), name="Saludables")
+        scatterEnfermo3=go.Scatter(x=datosPresionSanguineaEnfermo["PRESION_SAN"], y=datosDolorPechoEnfermo["DOLOR_PECHO"], mode="markers", marker=dict(color='rgb(255, 204, 204)'), name= "Enfermos")
         layoutGraph3=go.Layout(title="Scatter de la Presión Sanguinea y el tipo de Dolor de Pecho", xaxis=dict(title="Presion sanguinea [mm HG]"), yaxis=dict(title="Tipo de dolor de pecho"))
-        rectSano3=go.Scatter(x=[lowerICPresionSano, lowerICPresionSano, upperICPresionSano, upperICPresionSano, lowerICPresionSano], y=[lowerICDolorPechoSano, upperICDolorPechoSano, upperICDolorPechoSano, lowerICDolorPechoSano, lowerICDolorPechoSano], fill="toself", name= "Valor Esperado Saludables")
-        rectEnfermo3=go.Scatter(x=[lowerICPresionEnfermo, lowerICPresionEnfermo, upperICPresionEnfermo, upperICPresionEnfermo, lowerICPresionEnfermo], y=[lowerICDolorPechoEnfermo, upperICDolorPechoEnfermo, upperICDolorPechoEnfermo, lowerICDolorPechoEnfermo, lowerICDolorPechoEnfermo], fill="toself", name="Valor Esperado Enfermos")
+        rectSano3=go.Scatter(x=[lowerIPPresionSano, lowerIPPresionSano, upperIPPresionSano, upperIPPresionSano, lowerIPPresionSano], y=[lowerIPDolorPechoSano, upperIPDolorPechoSano, upperIPDolorPechoSano, lowerIPDolorPechoSano, lowerIPDolorPechoSano], fill="toself", name= "Predicción Saludables", marker=dict(color='rgb(51, 255, 255)'))
+        rectEnfermo3=go.Scatter(x=[lowerIPPresionEnfermo, lowerIPPresionEnfermo, upperIPPresionEnfermo, upperIPPresionEnfermo, lowerIPPresionEnfermo], y=[lowerIPDolorPechoEnfermo, upperIPDolorPechoEnfermo, upperIPDolorPechoEnfermo, lowerIPDolorPechoEnfermo, lowerIPDolorPechoEnfermo], fill="toself", name="Predicción Enfermos", marker=dict(color='rgb(255, 51, 51)'))
         puntoPaciente3=go.Scatter(x=[Presion],y=[TipoDolor], mode="markers", marker=dict(symbol="x",color="black",size=10), name="Paciente Actual")
         graph3=go.Figure(data=[scatterSano3, scatterEnfermo3,puntoPaciente3, rectSano3, rectEnfermo3], layout=layoutGraph3)
     return graph1,graph2,graph3
