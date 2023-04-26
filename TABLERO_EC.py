@@ -25,15 +25,17 @@ from pgmpy.readwrite import BIFReader
 #                        ('H','EC'),('EC','RE'),('EC','HR'),('EC','P'),('EC','AI'),('EC','SER'),
 #                       ('EC','F'),('EC','D'),('S','D')])
 
-env_path='env\\app.env'
+env_path='env//app.env'
 # load env 
 load_dotenv(dotenv_path=env_path)
 # extract env variables
-USER=os.getenv('USER')
-PASSWORD=os.getenv('PASSWORD')
+USER=os.environ.get('USUARIO')
+PASSWORD=os.getenv('CLAVE')
 HOST=os.getenv('HOST')
 PORT=os.getenv('PORT')
 DBNAME=os.getenv('DBNAME')
+print(USER)
+print("el anterior es el usuario")
 #Nos conectamos a la base de datos
 engine = create_engine('postgresql://{}:{}@{}:{}/{}'.format(USER, PASSWORD, HOST, PORT, DBNAME))
 dbConnection=engine.connect();
@@ -410,4 +412,4 @@ ST_depresion,electro_card,max_h_rate,pendiente,fluor):
         return respuesta
     
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run_server(debug=True, host='0.0.0.0', port='8050')
