@@ -25,7 +25,7 @@ from pgmpy.readwrite import BIFReader
 #                        ('H','EC'),('EC','RE'),('EC','HR'),('EC','P'),('EC','AI'),('EC','SER'),
 #                       ('EC','F'),('EC','D'),('S','D')])
 
-env_path='env//app.env'
+env_path='env\\app.env'
 # load env 
 load_dotenv(dotenv_path=env_path)
 # extract env variables
@@ -189,20 +189,24 @@ app.layout = html.Div([
     
     
     
-    html.Div(html.Div([dcc.Graph(id="grafica")]),
+    html.Div([
+    html.Div(
+        dcc.Graph(id="graficas")
+    ),
     dcc.Slider(
         id='graph-selector',
         min=1,
         max=3,
         value=1,
-        step=None,
-        included=False,
         marks={
             1: 'Graph 1',
             2: 'Graph 2',
             3: 'Graph 3'
-        }
-    )),
+        },
+        step=None,
+        included=False
+    )
+]),
     ]
     ),
     html.Br(),
@@ -275,8 +279,8 @@ app.layout = html.Div([
 
 
 @app.callback(
-    Output('grafica', 'figure'),
-    [Input('graph-selector', 'value')]
+    Output('graficas', 'figure'),
+    [Input('graph-selector', 'value')],
     [State("MFCGraficas", "value"),State("EdadGraficas", "value"),State("PresionGraficas", "value"),State("TipoDolorGraficas", "value")]
 )
 def update_graph(value, MFC, Edad, Presion, TipoDolor):
@@ -315,6 +319,7 @@ def update_graph(value, MFC, Edad, Presion, TipoDolor):
             rectEnfermo2=go.Scatter(x=[lowerIPEdadEnfermo, lowerIPEdadEnfermo, upperIPEdadEnfermo, upperIPEdadEnfermo, lowerIPEdadEnfermo], y=[lowerIPPresionEnfermo, upperIPPresionEnfermo, upperIPPresionEnfermo, lowerIPPresionEnfermo, lowerIPPresionEnfermo], fill="toself", name="Predicción Enfermos", marker=dict(color='rgb(255, 204, 204)'))
             puntoPaciente2=go.Scatter(x=[Edad],y=[Presion], mode="markers", marker=dict(symbol="x",color="black",size=10), name="Paciente Actual")
             graph2=go.Figure(data=[scatterSano2, scatterEnfermo2,puntoPaciente2 ,rectSano2, rectEnfermo2], layout=layoutGraph2)
+            return graph2
     elif value ==3:
         if MFC==0 and Edad==0 and Presion==0 and TipoDolor==0:
             scatterSano3=go.Scatter(x=datosPresionSanguineaSano["PRESION_SAN"], y=datosDolorPechoSano["DOLOR_PECHO"], mode="markers", marker=dict(color='rgb(51, 255, 255)'), name="Saludables")
@@ -323,6 +328,7 @@ def update_graph(value, MFC, Edad, Presion, TipoDolor):
             rectSano3=go.Scatter(x=[lowerIPPresionSano, lowerIPPresionSano, upperIPPresionSano, upperIPPresionSano, lowerIPPresionSano], y=[lowerIPDolorPechoSano, upperIPDolorPechoSano, upperIPDolorPechoSano, lowerIPDolorPechoSano, lowerIPDolorPechoSano], fill="toself", name= "Predicción Saludables", marker=dict(color='rgb(204, 255, 255)'))
             rectEnfermo3=go.Scatter(x=[lowerIPPresionEnfermo, lowerIPPresionEnfermo, upperIPPresionEnfermo, upperIPPresionEnfermo, lowerIPPresionEnfermo], y=[lowerIPDolorPechoEnfermo, upperIPDolorPechoEnfermo, upperIPDolorPechoEnfermo, lowerIPDolorPechoEnfermo, lowerIPDolorPechoEnfermo], fill="toself", name="Predicción Enfermos", marker=dict(color='rgb(255, 204, 204)'))
             graph3=go.Figure(data=[scatterSano3, scatterEnfermo3, rectSano3, rectEnfermo3], layout=layoutGraph3)
+            return graph3
         else:
             scatterSano3=go.Scatter(x=datosPresionSanguineaSano["PRESION_SAN"], y=datosDolorPechoSano["DOLOR_PECHO"], mode="markers", marker=dict(color='rgb(51, 255, 255)'), name="Saludables")
             scatterEnfermo3=go.Scatter(x=datosPresionSanguineaEnfermo["PRESION_SAN"], y=datosDolorPechoEnfermo["DOLOR_PECHO"], mode="markers", marker=dict(color='rgb(255, 51, 51)'), name= "Enfermos")
@@ -331,6 +337,7 @@ def update_graph(value, MFC, Edad, Presion, TipoDolor):
             rectEnfermo3=go.Scatter(x=[lowerIPPresionEnfermo, lowerIPPresionEnfermo, upperIPPresionEnfermo, upperIPPresionEnfermo, lowerIPPresionEnfermo], y=[lowerIPDolorPechoEnfermo, upperIPDolorPechoEnfermo, upperIPDolorPechoEnfermo, lowerIPDolorPechoEnfermo, lowerIPDolorPechoEnfermo], fill="toself", name="Predicción Enfermos", marker=dict(color='rgb(255, 204, 204)'))
             puntoPaciente3=go.Scatter(x=[Presion],y=[TipoDolor], mode="markers", marker=dict(symbol="x",color="black",size=10), name="Paciente Actual")
             graph3=go.Figure(data=[scatterSano3, scatterEnfermo3,puntoPaciente3, rectSano3, rectEnfermo3], layout=layoutGraph3)
+            return graph3
 
 #Con los intervalos previos y los datos de las personas saludables y enfermas se generan los graficos y el cuadro de IC, si el boton se presiona se capta los valores en la input box y se añade ese valor al grafico como una cruz negra
 
@@ -433,4 +440,4 @@ ST_depresion,electro_card,max_h_rate,pendiente,fluor):
         return respuesta
     
 if __name__ == '__main__':
-    app.run_server(debug=True, host='0.0.0.0', port='8050')
+    app.run_server(debug=True)
