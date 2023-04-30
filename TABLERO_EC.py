@@ -154,11 +154,11 @@ app.layout = html.Div([
               value=0,
               id="MFCGraficas",style={'width': '100%',"display":"flex", "justifyContent":'center'}
     )],style={'width': '50%', 'display': 'inline-block'}),
-    html.Div(children=[html.Label("Colesterol",style={'textAlign': 'left','color': 'black', 'fontSize': 20}),
+    html.Div(children=[html.Label("Edad",style={'textAlign': 'left','color': 'black', 'fontSize': 20}),
     dcc.Input(placeholder="Valor sin unidades",
               type="number",
               value=0,
-              id="ColesterolGraficas",style={'width': '100%',"display":"flex", "justifyContent":'center'}
+              id="EdadGraficas",style={'width': '100%',"display":"flex", "justifyContent":'center'}
     )],style={'width': '50%', 'display': 'inline-block'}),
   
     
@@ -189,7 +189,7 @@ app.layout = html.Div([
     
     
     
-    html.Div([dcc.Graph(id="graficaMFCyColesterol"),dcc.Graph(id="graficaPresionyColesterol"),dcc.Graph(id="graficaTipoDeDoloryPresion")]),
+    html.Div([dcc.Graph(id="graficaMFCyEdad"),dcc.Graph(id="graficaPresionyEdad"),dcc.Graph(id="graficaTipoDeDoloryPresion")]),
     ]
     ),
     html.Div(children=[html.Br(), html.Button('Generar Gráficas', id='generar', n_clicks=0,style={'font-size': '12px', 
@@ -263,9 +263,9 @@ app.layout = html.Div([
 #De ipunts tenemos el boton
 #Y states los valores que inserta el usuario
 @app.callback(
-    [Output("graficaMFCyColesterol","figure"), Output("graficaPresionyColesterol","figure"), Output("graficaTipoDeDoloryPresion","figure")],
+    [Output("graficaMFCyEdad","figure"), Output("graficaPresionyEdad","figure"), Output("graficaTipoDeDoloryPresion","figure")],
     [Input("generar","n_clicks")],
-    [State("MFCGraficas", "value"),State("ColesterolGraficas", "value"),State("PresionGraficas", "value"),State("TipoDolorGraficas", "value")]
+    [State("MFCGraficas", "value"),State("EdadGraficas", "value"),State("PresionGraficas", "value"),State("TipoDolorGraficas", "value")]
 )
 def actualizarGraficaMFCyColesterol(n_clicks, MFC, Edad, Presion, TipoDolor):
     if n_clicks==0:
