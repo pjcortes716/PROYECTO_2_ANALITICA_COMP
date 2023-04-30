@@ -189,12 +189,22 @@ app.layout = html.Div([
     
     
     
-    html.Div([dcc.Graph(id="graficaMFCyEdad"),dcc.Graph(id="graficaPresionyEdad"),dcc.Graph(id="graficaTipoDeDoloryPresion")]),
+    html.Div(html.Div([dcc.Graph(id="grafica")]),
+    dcc.Slider(
+        id='graph-selector',
+        min=1,
+        max=3,
+        value=1,
+        step=None,
+        included=False,
+        marks={
+            1: 'Graph 1',
+            2: 'Graph 2',
+            3: 'Graph 3'
+        }
+    )),
     ]
     ),
-    html.Div(children=[html.Br(), html.Button('Generar Gráficas', id='generar', n_clicks=0,style={'font-size': '12px', 
-    'width': '100%', 'display': 'inline-block', 
-    'margin-bottom': '10px', 'margin-right': '5px', 'height':'37px', 'verticalAlign': 'top'})]),
     html.Br(),
     html.Div(children=[
         html.H1("Ingrese los datos detallados de la historia clinica del paciente para hacer una prediccion", style={'font-size':25}),
@@ -262,55 +272,66 @@ app.layout = html.Div([
 #Queremos que la funcion cambien las graficas por eso los outputs son las figures de las 3 graficas
 #De ipunts tenemos el boton
 #Y states los valores que inserta el usuario
+
+
 @app.callback(
-    [Output("graficaMFCyEdad","figure"), Output("graficaPresionyEdad","figure"), Output("graficaTipoDeDoloryPresion","figure")],
-    [Input("generar","n_clicks")],
+    Output('grafica', 'figure'),
+    [Input('graph-selector', 'value')]
     [State("MFCGraficas", "value"),State("EdadGraficas", "value"),State("PresionGraficas", "value"),State("TipoDolorGraficas", "value")]
 )
-def actualizarGraficaMFCyColesterol(n_clicks, MFC, Edad, Presion, TipoDolor):
-    if n_clicks==0:
-        scatterSano1=go.Scatter(x=datosEdadSano["EDAD"], y=datosMaximaFrecuenciaCardiacaSano["MAX_HEART_R"], mode="markers", marker=dict(color='rgb(51, 255, 255)'), name="Saludables")
-        scatterEnfermo1=go.Scatter(x=datosEdadEnfermo["EDAD"], y=datosMaximaFrecuenciaCardiacaEnfermo["MAX_HEART_R"], mode="markers", marker=dict(color='rgb(255, 51, 51)'), name= "Enfermos")
-        layoutGraph1=go.Layout(title="Scatter de la Máxima Frecuencia Cardiaca y Edad", xaxis=dict(title="Edad"), yaxis=dict(title="Maxima Frecuencia Cardiaca [bpm]"))
-        rectSano1=go.Scatter(x=[lowerIPEdadSano, lowerIPEdadSano, upperIPEdadSano, upperIPEdadSano, lowerIPEdadSano], y=[lowerIPFreqSano, upperIPFreqSano, upperIPFreqSano, lowerIPFreqSano, lowerIPFreqSano], fill="toself", name= "Predicción Saludables", marker=dict(color='rgb(204, 255, 255)'))
-        rectEnfermo1=go.Scatter(x=[lowerIPEdadEnfermo, lowerIPEdadEnfermo, upperIPEdadEnfermo, upperIPEdadEnfermo, lowerIPEdadEnfermo], y=[lowerIPFreqEnfermo, upperIPFreqEnfermo, upperIPFreqEnfermo, lowerIPFreqEnfermo, lowerIPFreqEnfermo], fill="toself", name="Predicción Enfermos", marker=dict(color='rgb(255, 204, 204)'))
-        graph1=go.Figure(data=[scatterSano1, scatterEnfermo1, rectSano1, rectEnfermo1], layout=layoutGraph1)
-        scatterSano2=go.Scatter(x=datosEdadSano["EDAD"], y=datosPresionSanguineaSano["PRESION_SAN"], mode="markers", marker=dict(color='rgb(51, 255, 255)'), name="Saludables")
-        scatterEnfermo2=go.Scatter(x=datosEdadEnfermo["EDAD"], y=datosPresionSanguineaSano["PRESION_SAN"], mode="markers", marker=dict(color='rgb(255, 51, 51)'), name= "Enfermos")
-        layoutGraph2=go.Layout(title="Scatter de la Presión Sanguinea y Edad", xaxis=dict(title="Edad"), yaxis=dict(title="Presión Sanguinea [mm Hg]"))
-        rectSano2=go.Scatter(x=[lowerIPEdadSano, lowerIPEdadSano, upperIPEdadSano, upperIPEdadSano, lowerIPEdadSano], y=[lowerIPPresionSano, upperIPPresionSano, upperIPPresionSano, lowerIPPresionSano, lowerIPPresionSano], fill="toself", name= "Predicción Saludables", marker=dict(color='rgb(204, 255, 255)'))
-        rectEnfermo2=go.Scatter(x=[lowerIPEdadEnfermo, lowerIPEdadEnfermo, upperIPEdadEnfermo, upperIPEdadEnfermo, lowerIPEdadEnfermo], y=[lowerIPPresionEnfermo, upperIPPresionEnfermo, upperIPPresionEnfermo, lowerIPPresionEnfermo, lowerIPPresionEnfermo], fill="toself", name="Predicción Enfermos", marker=dict(color='rgb(255, 204, 204)'))
-        graph2=go.Figure(data=[scatterSano2, scatterEnfermo2, rectSano2, rectEnfermo2], layout=layoutGraph2)
-        scatterSano3=go.Scatter(x=datosPresionSanguineaSano["PRESION_SAN"], y=datosDolorPechoSano["DOLOR_PECHO"], mode="markers", marker=dict(color='rgb(51, 255, 255)'), name="Saludables")
-        scatterEnfermo3=go.Scatter(x=datosPresionSanguineaEnfermo["PRESION_SAN"], y=datosDolorPechoEnfermo["DOLOR_PECHO"], mode="markers", marker=dict(color='rgb(255, 51, 51)'), name= "Enfermos")
-        layoutGraph3=go.Layout(title="Scatter de la Presión Sanguinea y el tipo de Dolor de Pecho", xaxis=dict(title="Presion sanguinea [mm HG]"), yaxis=dict(title="Tipo de dolor de pecho"))
-        rectSano3=go.Scatter(x=[lowerIPPresionSano, lowerIPPresionSano, upperIPPresionSano, upperIPPresionSano, lowerIPPresionSano], y=[lowerIPDolorPechoSano, upperIPDolorPechoSano, upperIPDolorPechoSano, lowerIPDolorPechoSano, lowerIPDolorPechoSano], fill="toself", name= "Predicción Saludables", marker=dict(color='rgb(204, 255, 255)'))
-        rectEnfermo3=go.Scatter(x=[lowerIPPresionEnfermo, lowerIPPresionEnfermo, upperIPPresionEnfermo, upperIPPresionEnfermo, lowerIPPresionEnfermo], y=[lowerIPDolorPechoEnfermo, upperIPDolorPechoEnfermo, upperIPDolorPechoEnfermo, lowerIPDolorPechoEnfermo, lowerIPDolorPechoEnfermo], fill="toself", name="Predicción Enfermos", marker=dict(color='rgb(255, 204, 204)'))
-        graph3=go.Figure(data=[scatterSano3, scatterEnfermo3, rectSano3, rectEnfermo3], layout=layoutGraph3)
-        
-    else:
-        scatterSano1=go.Scatter(x=datosEdadSano["EDAD"], y=datosMaximaFrecuenciaCardiacaSano["MAX_HEART_R"], mode="markers", marker=dict(color='rgb(51, 255, 255)'), name="Saludables")
-        scatterEnfermo1=go.Scatter(x=datosEdadEnfermo["EDAD"], y=datosMaximaFrecuenciaCardiacaEnfermo["MAX_HEART_R"], mode="markers", marker=dict(color='rgb(255, 51, 51)'), name= "Enfermos")
-        layoutGraph1=go.Layout(title="Scatter de la Máxima Frecuencia Cardiaca y Edad", xaxis=dict(title="Edad"), yaxis=dict(title="Maxima Frecuencia Cardiaca [bpm]"))
-        rectSano1=go.Scatter(x=[lowerIPEdadSano, lowerIPEdadSano, upperIPEdadSano, upperIPEdadSano, lowerIPEdadSano], y=[lowerIPFreqSano, upperIPFreqSano, upperIPFreqSano, lowerIPFreqSano, lowerIPFreqSano], fill="toself", name= "Predicción Saludables", marker=dict(color='rgb(204, 255, 255)'))
-        rectEnfermo1=go.Scatter(x=[lowerIPEdadEnfermo, lowerIPEdadEnfermo, upperIPEdadEnfermo, upperIPEdadEnfermo, lowerIPEdadEnfermo], y=[lowerIPFreqEnfermo, upperIPFreqEnfermo, upperIPFreqEnfermo, lowerIPFreqEnfermo, lowerIPFreqEnfermo], fill="toself", name="Predicción Enfermos", marker=dict(color='rgb(255, 204, 204)'))
-        puntoPaciente1=go.Scatter(x=[Edad],y=[MFC], mode="markers", marker=dict(symbol="x",color="black",size=10), name="Paciente Actual")
-        graph1=go.Figure(data=[scatterSano1, scatterEnfermo1, puntoPaciente1, rectSano1, rectEnfermo1], layout=layoutGraph1)
-        scatterSano2=go.Scatter(x=datosEdadSano["EDAD"], y=datosPresionSanguineaSano["PRESION_SAN"], mode="markers", marker=dict(color='rgb(51, 255, 255)'), name="Saludables")
-        scatterEnfermo2=go.Scatter(x=datosEdadEnfermo["EDAD"], y=datosPresionSanguineaSano["PRESION_SAN"], mode="markers", marker=dict(color='rgb(255, 51, 51)'), name= "Enfermos")
-        layoutGraph2=go.Layout(title="Scatter de la Presión Sanguinea y Edad", xaxis=dict(title="Edad"), yaxis=dict(title="Presión Sanguinea [mm Hg]"))
-        rectSano2=go.Scatter(x=[lowerIPEdadSano, lowerIPEdadSano, upperIPEdadSano, upperIPEdadSano, lowerIPEdadSano], y=[lowerIPPresionSano, upperIPPresionSano, upperIPPresionSano, lowerIPPresionSano, lowerIPPresionSano], fill="toself", name= "Predicción Saludables", marker=dict(color='rgb(204, 255, 255)'))
-        rectEnfermo2=go.Scatter(x=[lowerIPEdadEnfermo, lowerIPEdadEnfermo, upperIPEdadEnfermo, upperIPEdadEnfermo, lowerIPEdadEnfermo], y=[lowerIPPresionEnfermo, upperIPPresionEnfermo, upperIPPresionEnfermo, lowerIPPresionEnfermo, lowerIPPresionEnfermo], fill="toself", name="Predicción Enfermos", marker=dict(color='rgb(255, 204, 204)'))
-        puntoPaciente2=go.Scatter(x=[Edad],y=[Presion], mode="markers", marker=dict(symbol="x",color="black",size=10), name="Paciente Actual")
-        graph2=go.Figure(data=[scatterSano2, scatterEnfermo2,puntoPaciente2 ,rectSano2, rectEnfermo2], layout=layoutGraph2)
-        scatterSano3=go.Scatter(x=datosPresionSanguineaSano["PRESION_SAN"], y=datosDolorPechoSano["DOLOR_PECHO"], mode="markers", marker=dict(color='rgb(51, 255, 255)'), name="Saludables")
-        scatterEnfermo3=go.Scatter(x=datosPresionSanguineaEnfermo["PRESION_SAN"], y=datosDolorPechoEnfermo["DOLOR_PECHO"], mode="markers", marker=dict(color='rgb(255, 51, 51)'), name= "Enfermos")
-        layoutGraph3=go.Layout(title="Scatter de la Presión Sanguinea y el tipo de Dolor de Pecho", xaxis=dict(title="Presion sanguinea [mm HG]"), yaxis=dict(title="Tipo de dolor de pecho"))
-        rectSano3=go.Scatter(x=[lowerIPPresionSano, lowerIPPresionSano, upperIPPresionSano, upperIPPresionSano, lowerIPPresionSano], y=[lowerIPDolorPechoSano, upperIPDolorPechoSano, upperIPDolorPechoSano, lowerIPDolorPechoSano, lowerIPDolorPechoSano], fill="toself", name= "Predicción Saludables", marker=dict(color='rgb(204, 255, 255)'))
-        rectEnfermo3=go.Scatter(x=[lowerIPPresionEnfermo, lowerIPPresionEnfermo, upperIPPresionEnfermo, upperIPPresionEnfermo, lowerIPPresionEnfermo], y=[lowerIPDolorPechoEnfermo, upperIPDolorPechoEnfermo, upperIPDolorPechoEnfermo, lowerIPDolorPechoEnfermo, lowerIPDolorPechoEnfermo], fill="toself", name="Predicción Enfermos", marker=dict(color='rgb(255, 204, 204)'))
-        puntoPaciente3=go.Scatter(x=[Presion],y=[TipoDolor], mode="markers", marker=dict(symbol="x",color="black",size=10), name="Paciente Actual")
-        graph3=go.Figure(data=[scatterSano3, scatterEnfermo3,puntoPaciente3, rectSano3, rectEnfermo3], layout=layoutGraph3)
-    return graph1,graph2,graph3
+def update_graph(value, MFC, Edad, Presion, TipoDolor):
+    if value == 1:
+        if MFC==0 and Edad==0 and Presion==0 and TipoDolor==0:
+            scatterSano1=go.Scatter(x=datosEdadSano["EDAD"], y=datosMaximaFrecuenciaCardiacaSano["MAX_HEART_R"], mode="markers", marker=dict(color='rgb(51, 255, 255)'), name="Saludables")
+            scatterEnfermo1=go.Scatter(x=datosEdadEnfermo["EDAD"], y=datosMaximaFrecuenciaCardiacaEnfermo["MAX_HEART_R"], mode="markers", marker=dict(color='rgb(255, 51, 51)'), name= "Enfermos")
+            layoutGraph1=go.Layout(title="Scatter de la Máxima Frecuencia Cardiaca y Edad", xaxis=dict(title="Edad"), yaxis=dict(title="Maxima Frecuencia Cardiaca [bpm]"))
+            rectSano1=go.Scatter(x=[lowerIPEdadSano, lowerIPEdadSano, upperIPEdadSano, upperIPEdadSano, lowerIPEdadSano], y=[lowerIPFreqSano, upperIPFreqSano, upperIPFreqSano, lowerIPFreqSano, lowerIPFreqSano], fill="toself", name= "Predicción Saludables", marker=dict(color='rgb(204, 255, 255)'))
+            rectEnfermo1=go.Scatter(x=[lowerIPEdadEnfermo, lowerIPEdadEnfermo, upperIPEdadEnfermo, upperIPEdadEnfermo, lowerIPEdadEnfermo], y=[lowerIPFreqEnfermo, upperIPFreqEnfermo, upperIPFreqEnfermo, lowerIPFreqEnfermo, lowerIPFreqEnfermo], fill="toself", name="Predicción Enfermos", marker=dict(color='rgb(255, 204, 204)'))
+            graph1=go.Figure(data=[scatterSano1, scatterEnfermo1, rectSano1, rectEnfermo1], layout=layoutGraph1)
+            return graph1
+        else:
+            scatterSano1=go.Scatter(x=datosEdadSano["EDAD"], y=datosMaximaFrecuenciaCardiacaSano["MAX_HEART_R"], mode="markers", marker=dict(color='rgb(51, 255, 255)'), name="Saludables")
+            scatterEnfermo1=go.Scatter(x=datosEdadEnfermo["EDAD"], y=datosMaximaFrecuenciaCardiacaEnfermo["MAX_HEART_R"], mode="markers", marker=dict(color='rgb(255, 51, 51)'), name= "Enfermos")
+            layoutGraph1=go.Layout(title="Scatter de la Máxima Frecuencia Cardiaca y Edad", xaxis=dict(title="Edad"), yaxis=dict(title="Maxima Frecuencia Cardiaca [bpm]"))
+            rectSano1=go.Scatter(x=[lowerIPEdadSano, lowerIPEdadSano, upperIPEdadSano, upperIPEdadSano, lowerIPEdadSano], y=[lowerIPFreqSano, upperIPFreqSano, upperIPFreqSano, lowerIPFreqSano, lowerIPFreqSano], fill="toself", name= "Predicción Saludables", marker=dict(color='rgb(204, 255, 255)'))
+            rectEnfermo1=go.Scatter(x=[lowerIPEdadEnfermo, lowerIPEdadEnfermo, upperIPEdadEnfermo, upperIPEdadEnfermo, lowerIPEdadEnfermo], y=[lowerIPFreqEnfermo, upperIPFreqEnfermo, upperIPFreqEnfermo, lowerIPFreqEnfermo, lowerIPFreqEnfermo], fill="toself", name="Predicción Enfermos", marker=dict(color='rgb(255, 204, 204)'))
+            puntoPaciente1=go.Scatter(x=[Edad],y=[MFC], mode="markers", marker=dict(symbol="x",color="black",size=10), name="Paciente Actual")
+            graph1=go.Figure(data=[scatterSano1, scatterEnfermo1, puntoPaciente1, rectSano1, rectEnfermo1], layout=layoutGraph1)
+            return graph1
+    elif value ==2:
+        if MFC==0 and Edad==0 and Presion==0 and TipoDolor==0:
+            scatterSano2=go.Scatter(x=datosEdadSano["EDAD"], y=datosPresionSanguineaSano["PRESION_SAN"], mode="markers", marker=dict(color='rgb(51, 255, 255)'), name="Saludables")
+            scatterEnfermo2=go.Scatter(x=datosEdadEnfermo["EDAD"], y=datosPresionSanguineaSano["PRESION_SAN"], mode="markers", marker=dict(color='rgb(255, 51, 51)'), name= "Enfermos")
+            layoutGraph2=go.Layout(title="Scatter de la Presión Sanguinea y Edad", xaxis=dict(title="Edad"), yaxis=dict(title="Presión Sanguinea [mm Hg]"))
+            rectSano2=go.Scatter(x=[lowerIPEdadSano, lowerIPEdadSano, upperIPEdadSano, upperIPEdadSano, lowerIPEdadSano], y=[lowerIPPresionSano, upperIPPresionSano, upperIPPresionSano, lowerIPPresionSano, lowerIPPresionSano], fill="toself", name= "Predicción Saludables", marker=dict(color='rgb(204, 255, 255)'))
+            rectEnfermo2=go.Scatter(x=[lowerIPEdadEnfermo, lowerIPEdadEnfermo, upperIPEdadEnfermo, upperIPEdadEnfermo, lowerIPEdadEnfermo], y=[lowerIPPresionEnfermo, upperIPPresionEnfermo, upperIPPresionEnfermo, lowerIPPresionEnfermo, lowerIPPresionEnfermo], fill="toself", name="Predicción Enfermos", marker=dict(color='rgb(255, 204, 204)'))
+            graph2=go.Figure(data=[scatterSano2, scatterEnfermo2, rectSano2, rectEnfermo2], layout=layoutGraph2)
+            return graph2
+        else:
+            scatterSano2=go.Scatter(x=datosEdadSano["EDAD"], y=datosPresionSanguineaSano["PRESION_SAN"], mode="markers", marker=dict(color='rgb(51, 255, 255)'), name="Saludables")
+            scatterEnfermo2=go.Scatter(x=datosEdadEnfermo["EDAD"], y=datosPresionSanguineaSano["PRESION_SAN"], mode="markers", marker=dict(color='rgb(255, 51, 51)'), name= "Enfermos")
+            layoutGraph2=go.Layout(title="Scatter de la Presión Sanguinea y Edad", xaxis=dict(title="Edad"), yaxis=dict(title="Presión Sanguinea [mm Hg]"))
+            rectSano2=go.Scatter(x=[lowerIPEdadSano, lowerIPEdadSano, upperIPEdadSano, upperIPEdadSano, lowerIPEdadSano], y=[lowerIPPresionSano, upperIPPresionSano, upperIPPresionSano, lowerIPPresionSano, lowerIPPresionSano], fill="toself", name= "Predicción Saludables", marker=dict(color='rgb(204, 255, 255)'))
+            rectEnfermo2=go.Scatter(x=[lowerIPEdadEnfermo, lowerIPEdadEnfermo, upperIPEdadEnfermo, upperIPEdadEnfermo, lowerIPEdadEnfermo], y=[lowerIPPresionEnfermo, upperIPPresionEnfermo, upperIPPresionEnfermo, lowerIPPresionEnfermo, lowerIPPresionEnfermo], fill="toself", name="Predicción Enfermos", marker=dict(color='rgb(255, 204, 204)'))
+            puntoPaciente2=go.Scatter(x=[Edad],y=[Presion], mode="markers", marker=dict(symbol="x",color="black",size=10), name="Paciente Actual")
+            graph2=go.Figure(data=[scatterSano2, scatterEnfermo2,puntoPaciente2 ,rectSano2, rectEnfermo2], layout=layoutGraph2)
+    elif value ==3:
+        if MFC==0 and Edad==0 and Presion==0 and TipoDolor==0:
+            scatterSano3=go.Scatter(x=datosPresionSanguineaSano["PRESION_SAN"], y=datosDolorPechoSano["DOLOR_PECHO"], mode="markers", marker=dict(color='rgb(51, 255, 255)'), name="Saludables")
+            scatterEnfermo3=go.Scatter(x=datosPresionSanguineaEnfermo["PRESION_SAN"], y=datosDolorPechoEnfermo["DOLOR_PECHO"], mode="markers", marker=dict(color='rgb(255, 51, 51)'), name= "Enfermos")
+            layoutGraph3=go.Layout(title="Scatter de la Presión Sanguinea y el tipo de Dolor de Pecho", xaxis=dict(title="Presion sanguinea [mm HG]"), yaxis=dict(title="Tipo de dolor de pecho"))
+            rectSano3=go.Scatter(x=[lowerIPPresionSano, lowerIPPresionSano, upperIPPresionSano, upperIPPresionSano, lowerIPPresionSano], y=[lowerIPDolorPechoSano, upperIPDolorPechoSano, upperIPDolorPechoSano, lowerIPDolorPechoSano, lowerIPDolorPechoSano], fill="toself", name= "Predicción Saludables", marker=dict(color='rgb(204, 255, 255)'))
+            rectEnfermo3=go.Scatter(x=[lowerIPPresionEnfermo, lowerIPPresionEnfermo, upperIPPresionEnfermo, upperIPPresionEnfermo, lowerIPPresionEnfermo], y=[lowerIPDolorPechoEnfermo, upperIPDolorPechoEnfermo, upperIPDolorPechoEnfermo, lowerIPDolorPechoEnfermo, lowerIPDolorPechoEnfermo], fill="toself", name="Predicción Enfermos", marker=dict(color='rgb(255, 204, 204)'))
+            graph3=go.Figure(data=[scatterSano3, scatterEnfermo3, rectSano3, rectEnfermo3], layout=layoutGraph3)
+        else:
+            scatterSano3=go.Scatter(x=datosPresionSanguineaSano["PRESION_SAN"], y=datosDolorPechoSano["DOLOR_PECHO"], mode="markers", marker=dict(color='rgb(51, 255, 255)'), name="Saludables")
+            scatterEnfermo3=go.Scatter(x=datosPresionSanguineaEnfermo["PRESION_SAN"], y=datosDolorPechoEnfermo["DOLOR_PECHO"], mode="markers", marker=dict(color='rgb(255, 51, 51)'), name= "Enfermos")
+            layoutGraph3=go.Layout(title="Scatter de la Presión Sanguinea y el tipo de Dolor de Pecho", xaxis=dict(title="Presion sanguinea [mm HG]"), yaxis=dict(title="Tipo de dolor de pecho"))
+            rectSano3=go.Scatter(x=[lowerIPPresionSano, lowerIPPresionSano, upperIPPresionSano, upperIPPresionSano, lowerIPPresionSano], y=[lowerIPDolorPechoSano, upperIPDolorPechoSano, upperIPDolorPechoSano, lowerIPDolorPechoSano, lowerIPDolorPechoSano], fill="toself", name= "Predicción Saludables", marker=dict(color='rgb(204, 255, 255)'))
+            rectEnfermo3=go.Scatter(x=[lowerIPPresionEnfermo, lowerIPPresionEnfermo, upperIPPresionEnfermo, upperIPPresionEnfermo, lowerIPPresionEnfermo], y=[lowerIPDolorPechoEnfermo, upperIPDolorPechoEnfermo, upperIPDolorPechoEnfermo, lowerIPDolorPechoEnfermo, lowerIPDolorPechoEnfermo], fill="toself", name="Predicción Enfermos", marker=dict(color='rgb(255, 204, 204)'))
+            puntoPaciente3=go.Scatter(x=[Presion],y=[TipoDolor], mode="markers", marker=dict(symbol="x",color="black",size=10), name="Paciente Actual")
+            graph3=go.Figure(data=[scatterSano3, scatterEnfermo3,puntoPaciente3, rectSano3, rectEnfermo3], layout=layoutGraph3)
+
 #Con los intervalos previos y los datos de las personas saludables y enfermas se generan los graficos y el cuadro de IC, si el boton se presiona se capta los valores en la input box y se añade ese valor al grafico como una cruz negra
 
 @app.callback(
